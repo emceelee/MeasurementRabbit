@@ -18,18 +18,16 @@ namespace Messenger
                     channel.ExchangeDeclare(Constants.Exchanges.ProductQuantityUpdate, "fanout");
                     channel.ExchangeDeclare(Constants.Exchanges.SummarizationComplete, "fanout");
 
-                    var message = new SummarizationCompleteMessage()
+                    var message = new ProductQuantityUpdateMessage()
                     {
-                        EntityId = "L001",
-                        EntityType = EntityType.MeasurementPoint,
-                        IntervalType = IntervalType.Hourly,
+                        MeasurementPointId = "MP001",
                         ContractDayStart = new DateTime(2018, 8, 1),
                         ContractDayEnd = new DateTime(2018, 8, 31)
                     };
 
                     var body = Shared.MessagingUtility.SerializeObject(message);
 
-                    channel.BasicPublish(exchange: Constants.Exchanges.SummarizationComplete,
+                    channel.BasicPublish(exchange: Constants.Exchanges.ProductQuantityUpdate,
                         routingKey: "",
                         basicProperties: null,
                         body: body);

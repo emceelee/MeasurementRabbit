@@ -9,6 +9,7 @@ namespace Messages
         public static class Queues
         {
             public const string Summarization = "Summarization";
+            public const string SummarizationProductQuantity = "SummarizationProductQuantity";
         }
 
         public static class Exchanges

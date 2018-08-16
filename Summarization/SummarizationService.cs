@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -36,9 +37,9 @@ namespace Summarization
 
                         Console.WriteLine(" [x] Received SummarizationComplete Message \n\t{0}", message);
 
-                        var nextMessage = CreateNextMessage(message);
+                        var nextMessages = CreateNextMessages(message);
 
-                        if (nextMessage != null)
+                        foreach (var nextMessage in nextMessages)
                         {
                             var nextBody = Shared.MessagingUtility.SerializeObject(nextMessage);
 
@@ -63,9 +64,11 @@ namespace Summarization
             }
         }
 
-        static SummarizationCompleteMessage CreateNextMessage(SummarizationCompleteMessage inputMessage)
+        static List<SummarizationCompleteMessage> CreateNextMessages(SummarizationCompleteMessage inputMessage)
         {
-            IntervalType? intervalType = SummarizationUtility.GetNextInterval(inputMessage.IntervalType);
+            var list = new List<SummarizationCompleteMessage>();
+
+            IntervalType ? intervalType = SummarizationUtility.GetNextInterval(inputMessage.IntervalType);
 
             if(intervalType == null)
                 return null;
@@ -79,7 +82,24 @@ namespace Summarization
                 ContractDayEnd = inputMessage.ContractDayEnd
             };
 
-            return outputMessage;
+            list.Add(outputMessage);
+
+            if(inputMessage.EntityType == EntityType.MeasurementPoint && 
+                inputMessage.IntervalType == IntervalType.Hourly)
+            {
+                var locationMessage = new SummarizationCompleteMessage()
+                {
+                    EntityId = inputMessage.EntityId,
+                    EntityType = EntityType.Location,
+                    IntervalType = IntervalType.Hourly,
+                    ContractDayStart = inputMessage.ContractDayStart,
+                    ContractDayEnd = inputMessage.ContractDayEnd
+                };
+
+                list.Add(locationMessage);
+            }
+
+            return list;
         }
     }
 }
