@@ -7,8 +7,8 @@ namespace Messages
         public ProductQuantityUpdateMessage() { }
 
         public string MeasurementPointId { get; set; }
+
         public DateTime ContractDayStart { get; set; }
         public DateTime ContractDayEnd { get; set; }
-        public string TransactionalRecordVersion { get; set; }
     }
 }

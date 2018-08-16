@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Summarization
+namespace SummarizationProductQuantity
 {
-    class Program
+    class SummarizationProductQuantityService
     {
         static void Main(string[] args)
         {

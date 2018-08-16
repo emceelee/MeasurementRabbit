@@ -10,10 +10,19 @@ namespace Messages
     {
         public string EntityId { get; set; }
         public EntityType EntityType { get; set; }
+        public IntervalType IntervalType { get; set; }
+
         public DateTime ContractDayStart { get; set; }
         public DateTime ContractDayEnd { get; set; }
-        public TransactionalRecordVersion TransactionalRecordVersion { get; set; }
 
+        public override string ToString()
+        {
+            return $@"EntityId: {EntityId}, 
+        EntityType: {EntityType}, 
+        IntervalType: {IntervalType}, 
+        ContractDayStart: {ContractDayStart.ToString("MM/dd/yyyy")}, 
+        ContractDayEnd: {ContractDayEnd.ToString("MM/dd/yyyy")}";
+        }
     }
 
     public enum EntityType
@@ -22,8 +31,9 @@ namespace Messages
         Location
     }
 
-    public enum TransactionalRecordVersion
+    public enum IntervalType
     {
+        Hourly,
         Daily,
         Monthly
     }
